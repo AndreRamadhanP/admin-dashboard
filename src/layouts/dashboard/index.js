@@ -1,3 +1,6 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/no-unknown-property */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.1.0
@@ -12,6 +15,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
+import { useState } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -32,10 +36,27 @@ import DataTable from "examples/Tables/DataTable";
 // import Projects from "layouts/dashboard/components/Projects";
 import projectsTableData from "layouts/tables/data/projectsTableData";
 import penelitiTableData from "layouts/tables/data/penelitiTableData";
+import BarChart from "./components/BarChart";
+import LineChart from "./components/LineChart";
+import PieChart from "./components/PieChart";
+import { UserData } from "./data/Data";
 
 function Dashboard() {
   const { columns, rows } = penelitiTableData();
   const { columns: pColumns, rows: pRows } = projectsTableData();
+  // eslint-disable-next-line no-undef
+  const [userData] = useState({
+    labels: UserData.map((data) => data.year),
+    datasets: [
+      {
+        label: "Project Peneliti",
+        data: UserData.map((data) => data.userGain),
+        backgroundColor: ["rgba(75,192,192,1)", "#ecf0f1", "#50AF95", "#f3ba2f", "#2a71d0"],
+        borderColor: "black",
+        borderWidth: 2,
+      },
+    ],
+  });
 
   return (
     <DashboardLayout>
@@ -48,7 +69,7 @@ function Dashboard() {
                 color="dark"
                 icon="weekend"
                 title="Jumlah Project"
-                count={281}
+                count={200}
                 percentage={{
                   color: "success",
                   amount: "+55%",
@@ -62,7 +83,7 @@ function Dashboard() {
               <ComplexStatisticsCard
                 icon="leaderboard"
                 title="Total Peneliti"
-                count="2,300"
+                count="50"
                 percentage={{
                   color: "success",
                   amount: "+3%",
@@ -77,7 +98,7 @@ function Dashboard() {
                 color="success"
                 icon="store"
                 title="Pembiayaan"
-                count="34k"
+                count="30JT"
                 percentage={{
                   color: "success",
                   amount: "+1%",
@@ -87,7 +108,36 @@ function Dashboard() {
             </MDBox>
           </Grid>
         </Grid>
-        <Grid item xs={12} mt={3}>
+        <Grid container spacing={3}>
+          <Grid item xs={15} md={6} lg={6}>
+            <MDBox mb={1.5}>
+              <Card>
+                <div style={{ width: 500 }}>
+                  <BarChart chartData={userData} />
+                </div>
+              </Card>
+            </MDBox>
+          </Grid>
+          <Grid item xs={15} md={6} lg={6}>
+            <MDBox mb={1.5}>
+              <Card>
+                <div style={{ width: 500 }}>
+                  <LineChart chartData={userData} />
+                </div>
+              </Card>
+            </MDBox>
+          </Grid>
+        </Grid>
+        <Grid item xs={15} md={6} lg={12}>
+          <MDBox mb={1.5}>
+            <Card>
+              <div style={{ width: 450 }}>
+                <PieChart chartData={userData} />
+              </div>
+            </Card>
+          </MDBox>
+        </Grid>
+        <Grid item xs={12} mt={5}>
           <Card>
             <MDBox
               mx={2}
